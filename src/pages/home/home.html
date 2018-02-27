@@ -6,8 +6,7 @@
 	</ion-navbar>
 </ion-header>
 
-<ion-content padding>
-	<ion-list>
+<ion-content>
     <ion-item-group>
       <ion-item-divider color="light">INVOICE</ion-item-divider>
       <ion-item>
@@ -16,15 +15,15 @@
       </ion-item>
       <ion-item>
         <ion-label>Starting Amount</ion-label>
-        <ion-input type="number" placeholder="Starting Amount" [(ngModel)]="startAmount" (change)="checkTotal()" text-right></ion-input>
+        <ion-input type="number" placeholder="Starting Amount" [(ngModel)]="startAmount" (ionChange)="checkTotal()" text-right></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label>Print taken?</ion-label>
+        <ion-label>X Print taken?</ion-label>
         <ion-toggle [(ngModel)]="printTaken"></ion-toggle>
       </ion-item>
       <ion-item>
         <ion-label>Today's Sales</ion-label>
-        <ion-input type="number" placeholder="Today's Sales" [(ngModel)]="todaysSales" (change)="checkTotal()"  text-right></ion-input>
+        <ion-input type="number" placeholder="Today's Sales" [(ngModel)]="todaysSales" (ionChange)="checkTotal()"  text-right></ion-input>
       </ion-item>
       <ion-item>
         <ion-label>Total</ion-label>
@@ -38,11 +37,85 @@
     <ion-item-group>
       <ion-item-divider color="light">CASH IN TILL</ion-item-divider>
       <ion-item>
-        Cash in till
+        Cash in TILL
         <button ion-button outline item-end (click)="addCashTill()">
           Enter
         </button>
       </ion-item>
+      <ion-item>
+        <ion-label>Extra Coin/Cash available</ion-label>
+        <ion-input type="number" placeholder="Extra Coin/Cash available" [(ngModel)]="extraCash" (ionChange)="calculateTotalCashTill()"  text-right></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>Total Cash in TILL</ion-label>
+        <ion-label text-right>{{totalCashTill}}</ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label>Expenses</ion-label>
+        <ion-input type="number" placeholder="Expenses" [(ngModel)]="expenses" text-right (ionChange)="checkAllExpenses()"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>Credit Card Payments</ion-label>
+        <ion-input type="number" placeholder="Credit Card Bills" [(ngModel)]="creditCardPayments" text-right (ionChange)="checkAllExpenses()"></ion-input>
+      </ion-item>
+      <ion-row style="border-bottom:1px solid #dedede;margin-left:16px;">
+          <ion-col no-padding>
+            <ion-item no-padding>
+                <ion-label style="color:#999">Mistake Expenses</ion-label>
+            </ion-item>
+          </ion-col>
+          <ion-col no-padding>
+            <ion-item text-right no-padding>
+              <ion-select [(ngModel)]="mistake" interface="popover" style="max-width:100%;width:100%" (ionChange)="checkAllExpenses()">
+                <ion-option value="+">+</ion-option>
+                <ion-option value="-">-</ion-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+          <ion-col no-padding>
+            <ion-item text-right no-padding>
+                <ion-input type="number" placeholder="Excess/Deficient Amount" [(ngModel)]="mistakeAmount" text-right (ionChange)="checkAllExpenses()"></ion-input>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      <ion-row style="border-bottom:1px solid #dedede;margin-left:16px;">
+        <ion-col no-padding>
+          <ion-item no-padding>
+              <ion-label style="color:#999">Cash handover to owner</ion-label>
+          </ion-item>
+        </ion-col>
+        <ion-col no-padding>
+          <ion-item text-right no-padding>
+            <ion-select [(ngModel)]="cashOwner" interface="popover" style="max-width:100%;width:100%">
+              <ion-option value="aju">Aju</ion-option>
+              <ion-option value="ragesh">Ragesh</ion-option>
+              <ion-option value="sree">Sreekumar</ion-option>
+              <ion-option value="raj">UdayRaj</ion-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+        <ion-col no-padding>
+          <ion-item text-right no-padding>
+            <ion-input type="number" placeholder="Amount" [(ngModel)]="ownerAmount" text-right (ionChange)="checkAllExpenses()"></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-item>
+        <ion-label>Total Expenses</ion-label>
+        <ion-label text-right>{{totalExpenses}}</ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label>Status</ion-label>
+        <ion-label text-right *ngIf="getStatus()">OK</ion-label>
+        <ion-label text-right *ngIf="!getStatus()">{{totalExpenses-total}} : NOT OK</ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label>Z Print taken?</ion-label>
+        <ion-toggle [(ngModel)]="ZPrintTaken"></ion-toggle>
+      </ion-item>
+      <ion-item>
+        <ion-label>Register Closed?</ion-label>
+        <ion-toggle [(ngModel)]="regClosed"></ion-toggle>
+      </ion-item>
     </ion-item-group>
-  </ion-list>
 </ion-content>
