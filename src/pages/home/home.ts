@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavController, AlertController } from 'ionic-angular';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { Observable } from 'rxjs/Observable';
+import { Printer, PrintOptions } from '@ionic-native/printer';
 
 @Component({
   selector: 'page-home',
@@ -24,11 +25,12 @@ export class HomePage {
   creditCardPayments:any = 0;
   mistakeAmount:any = 0;
   ownerAmount:any = 0;
+  closeAmount:any = 0;
   cashOwner:string = "";
   mistake:string = "+";
   cashTill:{ 10000: number, 5000: number, 2000: number,1000: number, 500: number, 100: number,50: number, 10: number,5: number,1: number };
 
-  constructor(public navCtrl: NavController, afDB: AngularFireDatabase, private alertCtrl: AlertController) {
+  constructor(public navCtrl: NavController, afDB: AngularFireDatabase, private alertCtrl: AlertController,private printer: Printer) {
     //this.items = afDB.list('cuisines').valueChanges();
     this.invoiceDate = new Date().toISOString();
   }
@@ -54,7 +56,7 @@ export class HomePage {
   checkAllExpenses() {
     this.totalExpenses = parseFloat(this.totalCashTill) + parseFloat(this.expenses) + parseFloat(this.creditCardPayments) + parseFloat(this.ownerAmount);
     if(this.mistake == "-")
-      this.totalExpenses = parseFloat(this.totalExpenses) - parseFloat(this.mistakeAmount);
+      this.totalExpenses = this.totalExpenses - parseFloat(this.mistakeAmount);
     else
       this.totalExpenses = this.totalExpenses + parseFloat(this.mistakeAmount);
     console.log(this.totalExpenses);
@@ -203,5 +205,17 @@ export class HomePage {
 
   getStatus() {
     return (this.totalExpenses==this.total || Math.abs(this.total-this.totalExpenses)<=500);
+  }
+
+  print(){
+    this.printer.isAvailable().then(function(){
+        this.printer.print("https://www.techiediaries.com").then(function(){
+          alert("printing done successfully !");
+        },function(){
+          alert("Error while printing !");
+        });
+    }, function(){
+      alert('Error : printing is unavailable on your device ');
+    });
   }
 }

@@ -9,6 +9,7 @@ import { HomePage } from '../pages/home/home';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule, AngularFireDatabase } from 'angularfire2/database';
 import { AngularFireAuthModule } from 'angularfire2/auth';
+import { Printer, PrintOptions } from '@ionic-native/printer';
 
 export const firebaseConfig = {
   apiKey: "AIzaSyD3C09IXt0pTt4QYo2l4Bhnwju5Km7KsJg",
@@ -40,6 +41,7 @@ export const firebaseConfig = {
     StatusBar,
     SplashScreen,
     AngularFireDatabase,
+    Printer,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

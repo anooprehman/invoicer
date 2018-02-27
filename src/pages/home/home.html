@@ -1,12 +1,10 @@
 <ion-header>
-	<ion-navbar>
-		<ion-title>
-			Invoicer
-		</ion-title>
-	</ion-navbar>
+  <ion-navbar>
+      <ion-title text-center>SOUTH PARK @ ASAKUSA</ion-title>
+  </ion-navbar>
 </ion-header>
 
-<ion-content>
+<ion-content padding>
     <ion-item-group>
       <ion-item-divider color="light">INVOICE</ion-item-divider>
       <ion-item>
@@ -38,7 +36,8 @@
       <ion-item-divider color="light">CASH IN TILL</ion-item-divider>
       <ion-item>
         Cash in TILL
-        <button ion-button outline item-end (click)="addCashTill()">
+        <button ion-button outline icon-left item-end (click)="addCashTill()">
+          <ion-icon name="calculator"></ion-icon>
           Enter
         </button>
       </ion-item>
@@ -58,9 +57,9 @@
         <ion-label>Credit Card Payments</ion-label>
         <ion-input type="number" placeholder="Credit Card Bills" [(ngModel)]="creditCardPayments" text-right (ionChange)="checkAllExpenses()"></ion-input>
       </ion-item>
-      <ion-row style="border-bottom:1px solid #dedede;margin-left:16px;">
+      <ion-row style="border-bottom:1px solid #dedede;">
           <ion-col no-padding>
-            <ion-item no-padding>
+            <ion-item>
                 <ion-label style="color:#999">Mistake Expenses</ion-label>
             </ion-item>
           </ion-col>
@@ -78,9 +77,9 @@
             </ion-item>
           </ion-col>
         </ion-row>
-      <ion-row style="border-bottom:1px solid #dedede;margin-left:16px;">
+      <ion-row style="border-bottom:1px solid #dedede;">
         <ion-col no-padding>
-          <ion-item no-padding>
+          <ion-item >
               <ion-label style="color:#999">Cash handover to owner</ion-label>
           </ion-item>
         </ion-col>
@@ -117,5 +116,26 @@
         <ion-label>Register Closed?</ion-label>
         <ion-toggle [(ngModel)]="regClosed"></ion-toggle>
       </ion-item>
+      <ion-item>
+        <ion-label>Closing Amount</ion-label>
+        <ion-input type="number" placeholder="Closing Amount" [(ngModel)]="closeAmount" text-right></ion-input>
+      </ion-item>
+    </ion-item-group>
+
+    <ion-item-group>
+      <ion-item-divider color="light">ALL EXPENSES</ion-item-divider>
+      <ion-item>
+        <ion-input type="text" placeholder="Comments" [(ngModel)]="comments" ></ion-input>
+      </ion-item>
     </ion-item-group>
 </ion-content>
+<ion-footer>
+  <ion-toolbar>
+    <ion-buttons end>
+        <button ion-button outline icon-left color="primary" (click)="print()">
+          <ion-icon name="print"></ion-icon>
+           Print
+        </button>
+      </ion-buttons>
+  </ion-toolbar>
+</ion-footer>
