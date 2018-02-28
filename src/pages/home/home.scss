@@ -1,5 +1,9 @@
 page-home {
-    .item-inner{
+    ion-item .item-inner{
         border-bottom:1px solid #dedede !important;
+    }
+
+    ion-item ion-label {
+        color: black !important;
     }
 }

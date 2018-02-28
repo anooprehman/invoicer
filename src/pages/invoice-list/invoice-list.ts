@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
+import { Observable } from 'rxjs/Observable';
 
 /**
  * Generated class for the InvoiceListPage page.
@@ -8,14 +10,20 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
  * Ionic pages and navigation.
  */
 
-@IonicPage()
+@IonicPage({
+  name: 'invoice-list'
+})
 @Component({
   selector: 'page-invoice-list',
   templateUrl: 'invoice-list.html',
 })
 export class InvoiceListPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  items: Observable<any[]>;
+  itemsRef: AngularFireList<any>;
+  constructor(public navCtrl: NavController, public navParams: NavParams, afDB: AngularFireDatabase) {
+    this.items = afDB.list('invoices').valueChanges();
+    this.itemsRef = afDB.list('invoices');
   }
 
   ionViewDidLoad() {

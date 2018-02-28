@@ -9,5 +9,8 @@ import { InvoiceListPage } from './invoice-list';
   imports: [
     IonicPageModule.forChild(InvoiceListPage),
   ],
+  exports: [
+    InvoiceListPage
+  ]
 })
 export class InvoiceListPageModule {}

@@ -1,9 +1,12 @@
 import { Component } from '@angular/core';
-import { NavController, AlertController } from 'ionic-angular';
-import { AngularFireDatabase } from 'angularfire2/database';
+import { IonicPage, NavController, AlertController } from 'ionic-angular';
+import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
 import { Observable } from 'rxjs/Observable';
 import { Printer, PrintOptions } from '@ionic-native/printer';
 
+@IonicPage({
+  name: 'home'
+})
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
@@ -11,6 +14,7 @@ import { Printer, PrintOptions } from '@ionic-native/printer';
 export class HomePage {
 
   items: Observable<any[]>;
+  itemsRef: AngularFireList<any>;
   printTaken:boolean = false;
   ZPrintTaken:boolean = false;
   regClosed:boolean = false;
@@ -28,10 +32,13 @@ export class HomePage {
   closeAmount:any = 0;
   cashOwner:string = "";
   mistake:string = "+";
+  comments:string;
   cashTill:{ 10000: number, 5000: number, 2000: number,1000: number, 500: number, 100: number,50: number, 10: number,5: number,1: number };
+  expenseDetails:Array<{item:string,price:number}> = [{item:"",price:0}];
 
   constructor(public navCtrl: NavController, afDB: AngularFireDatabase, private alertCtrl: AlertController,private printer: Printer) {
-    //this.items = afDB.list('cuisines').valueChanges();
+    this.items = afDB.list('invoices').valueChanges();
+    this.itemsRef = afDB.list('invoices');
     this.invoiceDate = new Date().toISOString();
   }
 
@@ -207,7 +214,56 @@ export class HomePage {
     return (this.totalExpenses==this.total || Math.abs(this.total-this.totalExpenses)<=500);
   }
 
+  addDetails() {
+    this.expenseDetails.push({item:"",price:0});
+  }
+
+  removeItem(item){
+    console.log(this.expenseDetails,item);
+    let index = this.expenseDetails.indexOf(item);
+
+    if(index > -1){
+      this.expenseDetails.splice(index, 1);
+    }
+  }
+
+  addItem() {
+    this.itemsRef.push({ 
+      invoiceDate: this.invoiceDate,
+      startAmount: this.startAmount,
+      xPrintTaken: this.printTaken,
+      todaysSales: this.todaysSales,
+      total: this.total,
+      extraCash: this.extraCash,
+      totalCashTill: this.totalCashTill,
+      expenses: this.expenses,
+      creditCardPayments: this.creditCardPayments,
+      mistake: this.mistake,
+      mistakeAmount: this.mistakeAmount,
+      cashOwner: this.cashOwner,
+      ownerAmount: this.ownerAmount,
+      totalExpenses: this.totalExpenses,
+      status: this.totalExpenses-this.total,
+      ZPrintTaken: this.ZPrintTaken,
+      regClosed: this.regClosed,
+      expenseDetails: this.expenseDetails,
+      comments: this.comments
+    });
+    console.log(this.items,this.itemsRef)
+  }
+  updateItem(key: string, newText: string) {
+    this.itemsRef.update(key, { text: newText });
+  }
+  deleteItem(key: string) {    
+    this.itemsRef.remove(key); 
+  }
+  deleteEverything() {
+    this.itemsRef.remove();
+  }
+
   print(){
+    this.addItem();
+    console.log(this.printer.isAvailable());
     this.printer.isAvailable().then(function(){
         this.printer.print("https://www.techiediaries.com").then(function(){
           alert("printing done successfully !");
