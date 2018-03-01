@@ -32,8 +32,8 @@ export class HomePage {
   closeAmount:any = 0;
   cashOwner:string = "";
   mistake:string = "+";
-  comments:string;
-  cashTill:{ 10000: number, 5000: number, 2000: number,1000: number, 500: number, 100: number,50: number, 10: number,5: number,1: number };
+  comments:string = "";
+  cashTill:{ 10000: number, 5000: number, 2000: number,1000: number, 500: number, 100: number,50: number, 10: number };
   expenseDetails:Array<{item:string,price:number}> = [{item:"",price:0}];
 
   constructor(public navCtrl: NavController, afDB: AngularFireDatabase, private alertCtrl: AlertController,private printer: Printer) {
@@ -55,8 +55,6 @@ export class HomePage {
     100*this.cashTill['100'] +
     50*this.cashTill['50'] +
     10*this.cashTill['10'] +
-    5*this.cashTill['5'] +
-    1*this.cashTill['1'] +
     parseFloat(this.extraCash);
   }
 
@@ -120,18 +118,6 @@ export class HomePage {
         placeholder: '10',
         type: 'number',
         value:(this.cashTill)?this.cashTill['10'].toString():""
-      },
-      {
-        name: '5',
-        placeholder: '5',
-        type: 'number',
-        value:(this.cashTill)?this.cashTill['5'].toString():""
-      },
-      {
-        name: '1',
-        placeholder: '1',
-        type: 'number',
-        value:(this.cashTill)?this.cashTill['1'].toString():""
       }
     ],
     buttons: [
@@ -153,11 +139,8 @@ export class HomePage {
             500:isNaN(parseInt(data['500']))?0:parseInt(data['500']),
             100:isNaN(parseInt(data['100']))?0:parseInt(data['100']),
             50:isNaN(parseInt(data['50']))?0:parseInt(data['50']),
-            10:isNaN(parseInt(data['10']))?0:parseInt(data['10']),
-            5:isNaN(parseInt(data['5']))?0:parseInt(data['5']),
-            1:isNaN(parseInt(data['1']))?0:parseInt(data['1'])
+            10:isNaN(parseInt(data['10']))?0:parseInt(data['10'])
           }
-          console.log(this.cashTill);
           this.calculateTotalCashTill();
         }
       }
@@ -228,7 +211,7 @@ export class HomePage {
   }
 
   addItem() {
-    this.itemsRef.push({ 
+    let data = { 
       invoiceDate: this.invoiceDate,
       startAmount: this.startAmount,
       xPrintTaken: this.printTaken,
@@ -248,8 +231,9 @@ export class HomePage {
       regClosed: this.regClosed,
       expenseDetails: this.expenseDetails,
       comments: this.comments
-    });
-    console.log(this.items,this.itemsRef)
+    };
+    let ref = this.itemsRef.push(data);
+    this.navCtrl.push('invoice',{invoice: data}, { animate: true, direction: 'forward' });
   }
   updateItem(key: string, newText: string) {
     this.itemsRef.update(key, { text: newText });
@@ -261,17 +245,8 @@ export class HomePage {
     this.itemsRef.remove();
   }
 
-  print(){
+  save(){
     this.addItem();
-    console.log(this.printer.isAvailable());
-    this.printer.isAvailable().then(function(){
-        this.printer.print("https://www.techiediaries.com").then(function(){
-          alert("printing done successfully !");
-        },function(){
-          alert("Error while printing !");
-        });
-    }, function(){
-      alert('Error : printing is unavailable on your device ');
-    });
+    
   }
 }

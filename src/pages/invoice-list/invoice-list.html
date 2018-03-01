@@ -19,11 +19,13 @@
     <ion-list>
         <ion-item *ngFor="let item of items | async">
            
-          <h3>Starting Amount : {{item.startAmount}}</h3>
-          <h3>Closing Amount : {{item.totalCashTill}}</h3>
-          <p>Invoice date: {{item.invoiceDate | date:'fullDate'}}</p>
+          <h3>Expenses : <span style="color:#dd1818">{{item.totalExpenses}}</span> | Sales : <span style="color:#dd1818">{{item.todaysSales}}</span></h3>
+          <p style="margin-top:8px">{{item.invoiceDate | date:'fullDate'}}</p>
           <button ion-button outline item-end (click)="getDetails(item)">
             Details
+          </button>
+          <button ion-button item-end (click)="deleteItem(item.key)">
+            Delete
           </button>
         </ion-item>
       </ion-list>

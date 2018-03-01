@@ -6,10 +6,102 @@
 -->
 <ion-header>
   <ion-navbar>
-      <ion-title>SOUTH PARK @ ASAKUSA</ion-title>
+      <ion-title text-center>SOUTH PARK @ ASAKUSA</ion-title>
+      <ion-buttons end>
+        <button ion-button icon-left outline color="light" (click)="print()">
+          <ion-icon name="print"></ion-icon>
+           Print
+        </button>
+      </ion-buttons>
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content padding #invoiceContent>
+    <ion-item-group>
+      <ion-item-divider color="primary">INVOICE</ion-item-divider>
+      <ion-item>
+        <ion-label>Invoice Date</ion-label>
+        <ion-label text-right>{{item.invoiceDate | date:'fullDate'}}</ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label>Starting Amount</ion-label>
+        <ion-label text-right>{{item.startAmount}}</ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label>X Print taken?</ion-label>
+        <ion-label text-right>{{item.xPrintTaken ? "Yes":"No"}}</ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label>Total Sales</ion-label>
+        <ion-label text-right>{{item.todaysSales}}</ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label>Total</ion-label>
+        <ion-label text-right>{{item.total}}</ion-label>
+      </ion-item>
+    </ion-item-group>
+    <ion-item-group>
+      <ion-item-divider color="primary">CASH IN TILL</ion-item-divider>
+      <ion-item>
+        <ion-label>Cash in Till</ion-label>
+        <ion-label text-right>{{item.totalCashTill - item.extraCash}}</ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label>Extra Coin/Cash available</ion-label>
+        <ion-label text-right>{{item.extraCash}}</ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label>Total Cash in TILL</ion-label>
+        <ion-label text-right>{{item.totalCashTill}}</ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label>Expenses</ion-label>
+        <ion-label text-right>{{item.expenses}}</ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label>Credit Card Payments</ion-label>
+        <ion-label text-right>{{item.creditCardPayments}}</ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label>Mistake Expenses</ion-label>
+        <ion-label text-right>{{item.mistake}} {{item.mistakeAmount}}</ion-label>
+      </ion-item>
+      <ion-item >
+          <ion-label>Cash handover to owner</ion-label>
+          <ion-label text-right>{{item.cashOwner}} {{item.ownerAmount}}</ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label>Total Expenses</ion-label>
+        <ion-label text-right>{{item.totalExpenses}}</ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label>Status</ion-label>
+        <ion-label text-right>{{item.status}}</ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label>Z Print taken?</ion-label>
+        <ion-label text-right>{{item.ZPrintTaken ? "Yes":"No"}}</ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label>Register Closed?</ion-label>
+        <ion-label text-right>{{item.regClosed ? "Yes":"No"}}</ion-label>
+      </ion-item>
+    </ion-item-group>
+
+    <ion-item-group>
+      <ion-item-divider color="primary">ALL EXPENSES</ion-item-divider>
+      <ion-list>
+        <ion-item text-wrap *ngFor="let expense of item.expenseDetails;">
+          <ion-label>{{expense.item}}</ion-label>
+          <ion-label text-right>{{expense.price}}</ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-item-group>
+    <ion-item-group>
+      <ion-item-divider color="primary">COMMENTS</ion-item-divider>
+        <ion-item>
+          <ion-label>{{item.comments}}</ion-label>
+        </ion-item>
+    </ion-item-group>
 </ion-content>
 

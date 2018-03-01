@@ -7,7 +7,7 @@
 
 <ion-content class="bg">
     <ion-list no-lines>
-        <button ion-item menuClose *ngFor="let p of pages" (click)="openPage(p)" style="border-bottom:1px solid #738493" [class.active]="checkActivePage(p.index)">
+        <button ion-item menuClose *ngFor="let p of pages" (click)="openPage(p)"  [class.active]="checkActivePage(p.index)">
         <ion-icon name="{{p.icon}}" item-left></ion-icon>
         <h6>{{p.title}}</h6>
         </button>

@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component,ViewChild,ElementRef } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { Printer, PrintOptions } from '@ionic-native/printer';
 
 /**
  * Generated class for the InvoicePage page.
@@ -16,16 +17,26 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
   templateUrl: 'invoice.html',
 })
 export class InvoicePage {
-
+  @ViewChild('invoiceContent', {read: ElementRef}) invoiceContent: ElementRef;
   item:any;
   invoiceId:any;
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public navParams: NavParams,private printer: Printer) {
     this.item = this.navParams.get('invoice');
-    console.log(this.item);
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad InvoicePage');
   }
 
+  print(){
+    this.printer.isAvailable().then(function(){
+        this.printer.print(this.invoiceContent.nativeElement.innerHTML).then(function(){
+          alert("printing done successfully !");
+        },function(){
+          alert("Error while printing !");
+        });
+    }, function(){
+      alert('Error : printing is unavailable on your device ');
+    });
+  }
 }
