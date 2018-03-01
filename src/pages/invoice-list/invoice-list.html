@@ -22,6 +22,9 @@
           <h3>Starting Amount : {{item.startAmount}}</h3>
           <h3>Closing Amount : {{item.totalCashTill}}</h3>
           <p>Invoice date: {{item.invoiceDate | date:'fullDate'}}</p>
+          <button ion-button outline item-end (click)="getDetails(item)">
+            Details
+          </button>
         </ion-item>
       </ion-list>
 </ion-content>

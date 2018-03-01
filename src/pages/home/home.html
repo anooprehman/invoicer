@@ -138,15 +138,15 @@
               <ion-icon name="add-circle"></ion-icon>
             </button>
       </ion-item-divider>
-      <ion-list *ngFor="let item of expenseDetails;">
-        <ion-item-sliding>
-          <ion-item text-wrap >
+      <ion-list>
+        <ion-item-sliding *ngFor="let item of expenseDetails;">
+          <ion-item text-wrap>
             <ion-input type="text" placeholder="Item" [(ngModel)]="item.item"></ion-input>
             <ion-input type="text" placeholder="Price" [(ngModel)]="item.price" text-right style="border-left:1px solid #dedede"></ion-input>
           </ion-item>
           <ion-item-options side="right" (ionSwipe)="removeItem(item)">
-            <button ion-button expandable icon-only (click)="removeItem(item)">
-              <ion-icon name="trash"></ion-icon>
+            <button ion-button expandable (click)="removeItem(item)">
+              <ion-icon name="trash"></ion-icon> Delete
             </button>
           </ion-item-options>
         </ion-item-sliding>

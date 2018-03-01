@@ -22,12 +22,19 @@ export class InvoiceListPage {
   items: Observable<any[]>;
   itemsRef: AngularFireList<any>;
   constructor(public navCtrl: NavController, public navParams: NavParams, afDB: AngularFireDatabase) {
-    this.items = afDB.list('invoices').valueChanges();
     this.itemsRef = afDB.list('invoices');
+    // Use snapshotChanges().map() to store the key
+    this.items = this.itemsRef.snapshotChanges().map(changes => {
+      return changes.map(c => ({ key: c.payload.key, ...c.payload.val() }));
+    });
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad InvoiceListPage');
+  }
+
+  getDetails(item) {
+    this.navCtrl.push('invoice',{invoice: item}, { animate: true, direction: 'forward' })
   }
 
 }
