@@ -30,21 +30,17 @@ export class InvoicePage {
 
   print(){
     this.platform.ready().then(() => {
-      this.printer.check().then(onSuccess =>{ 
-        console.log(onSuccess);
-        this.printer.pick();
-        /*this.printer.isAvailable().then(function(){
-          this.printer.print(this.invoiceContent.nativeElement.innerHTML).then(function(){
-            alert("printing done successfully !");
-          },function(){
-            alert("Error while printing !");
-          });
-          }, function(){
-            alert('Error : printing is unavailable on your device ');
-          });*/
-       }, onError =>{ console.log(onError);});
-
-        
+    this.printer.isAvailable().then(function(){
+      console.log("available")
+      this.printer.print(this.invoiceContent.nativeElement.innerHTML).then(function(){
+        alert("printing done successfully !");
+      },function(){
+        alert("Error while printing !");
+      });
+      }, function(){
+        console.log("not available")
+        alert('Error : printing is unavailable on your device ');
+      });
     })
   }
 }

@@ -22,7 +22,7 @@ export class InvoiceListPage {
   items: Observable<any[]>;
   itemsRef: AngularFireList<any>;
   constructor(public navCtrl: NavController, public navParams: NavParams, afDB: AngularFireDatabase,public alertCtrl: AlertController) {
-    this.itemsRef = afDB.list('invoices');
+    this.itemsRef = afDB.list('invoices', ref => ref.orderByChild('reverseDate'));
     // Use snapshotChanges().map() to store the key
     this.items = this.itemsRef.snapshotChanges().map(changes => {
       return changes.map(c => ({ key: c.payload.key, ...c.payload.val() }));

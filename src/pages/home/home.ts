@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, AlertController, ToastController } from 'ionic-angular';
 import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
 import { Observable } from 'rxjs/Observable';
 import { Printer, PrintOptions } from '@ionic-native/printer';
@@ -37,10 +37,11 @@ export class HomePage {
   cashTill:{ 10000: number, 5000: number, 2000: number,1000: number, 500: number, 100: number,50: number, 10: number };
   expenseDetails:Array<{item:string,price:any}> = [{item:"",price:""}];
 
-  constructor(public navCtrl: NavController, afDB: AngularFireDatabase, private alertCtrl: AlertController,private printer: Printer) {
+  constructor(public navCtrl: NavController, afDB: AngularFireDatabase, private alertCtrl: AlertController,private printer: Printer, public toastCtrl: ToastController) {
     this.items = afDB.list('invoices').valueChanges();
     this.itemsRef = afDB.list('invoices');
-    this.invoiceDate = new Date().toISOString();
+    let tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
+    this.invoiceDate = (new Date(Date.now() - tzoffset)).toISOString().slice(0,-1);
   }
 
   checkTotal() {
@@ -151,6 +152,7 @@ export class HomePage {
             10:isNaN(parseInt(data['10']))?0:parseInt(data['10'])
           }
           this.calculateTotalCashTill();
+          this.checkAllExpenses();
         }
       }
     ]
@@ -220,8 +222,10 @@ export class HomePage {
   }
 
   addItem() {
+    let revDate:any = 0 - new Date(this.invoiceDate).getTime();
     let data = { 
       invoiceDate: this.invoiceDate,
+      reverseDate: revDate,
       startAmount: isNaN(parseFloat(this.startAmount))?0:parseFloat(this.startAmount),
       xPrintTaken: this.printTaken,
       todaysSales: isNaN(parseFloat(this.todaysSales))?0:parseFloat(this.todaysSales),
@@ -242,9 +246,21 @@ export class HomePage {
       expenseDetails: this.expenseDetails,
       comments: this.comments
     };
-    let ref = this.itemsRef.push(data);
-    this.navCtrl.push('invoice',{invoice: data}, { animate: true, direction: 'forward' });
+    let ref = this.itemsRef.push(data).then((item) => {
+      this.presentToast();
+      this.navCtrl.push('invoice',{invoice: data}, { animate: true, direction: 'forward' });
+    });
   }
+
+  presentToast() {
+    let toast = this.toastCtrl.create({
+      message: 'Saved successfully',
+      showCloseButton: true,
+      closeButtonText: 'Ok'
+    });
+    toast.present();
+  }
+
   updateItem(key: string, newText: string) {
     this.itemsRef.update(key, { text: newText });
   }
