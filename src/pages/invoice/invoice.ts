@@ -1,5 +1,5 @@
 import { Component,ViewChild,ElementRef } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { Platform, IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Printer, PrintOptions } from '@ionic-native/printer';
 
 /**
@@ -20,7 +20,7 @@ export class InvoicePage {
   @ViewChild('invoiceContent', {read: ElementRef}) invoiceContent: ElementRef;
   item:any;
   invoiceId:any;
-  constructor(public navCtrl: NavController, public navParams: NavParams,private printer: Printer) {
+  constructor(public platform: Platform, public navCtrl: NavController, public navParams: NavParams,private printer: Printer) {
     this.item = this.navParams.get('invoice');
   }
 
@@ -29,14 +29,22 @@ export class InvoicePage {
   }
 
   print(){
-    this.printer.isAvailable().then(function(){
-        this.printer.print(this.invoiceContent.nativeElement.innerHTML).then(function(){
-          alert("printing done successfully !");
-        },function(){
-          alert("Error while printing !");
-        });
-    }, function(){
-      alert('Error : printing is unavailable on your device ');
-    });
+    this.platform.ready().then(() => {
+      this.printer.check().then(onSuccess =>{ 
+        console.log(onSuccess);
+        this.printer.pick();
+        /*this.printer.isAvailable().then(function(){
+          this.printer.print(this.invoiceContent.nativeElement.innerHTML).then(function(){
+            alert("printing done successfully !");
+          },function(){
+            alert("Error while printing !");
+          });
+          }, function(){
+            alert('Error : printing is unavailable on your device ');
+          });*/
+       }, onError =>{ console.log(onError);});
+
+        
+    })
   }
 }

@@ -19,22 +19,23 @@ export class HomePage {
   ZPrintTaken:boolean = false;
   regClosed:boolean = false;
   invoiceDate:string;
-  todaysSales:any = 0;
-  startAmount:any = 0;
+  todaysSales:any;
+  startAmount:any;
   total:any = 0;
-  extraCash:any = 0;
+  extraCash:any;
   totalCashTill:any = 0;
-  expenses:any = 0;
+  expenses:any;
+  coupons:any;
   totalExpenses:any = 0;
-  creditCardPayments:any = 0;
-  mistakeAmount:any = 0;
-  ownerAmount:any = 0;
-  closeAmount:any = 0;
+  creditCardPayments:any;
+  mistakeAmount:any;
+  ownerAmount:any;
+  closeAmount:any=0;
   cashOwner:string = "";
   mistake:string = "+";
   comments:string = "";
   cashTill:{ 10000: number, 5000: number, 2000: number,1000: number, 500: number, 100: number,50: number, 10: number };
-  expenseDetails:Array<{item:string,price:number}> = [{item:"",price:0}];
+  expenseDetails:Array<{item:string,price:any}> = [{item:"",price:""}];
 
   constructor(public navCtrl: NavController, afDB: AngularFireDatabase, private alertCtrl: AlertController,private printer: Printer) {
     this.items = afDB.list('invoices').valueChanges();
@@ -43,10 +44,13 @@ export class HomePage {
   }
 
   checkTotal() {
-    this.total = parseFloat(this.todaysSales) + parseFloat(this.startAmount);
+    let todays = isNaN(parseFloat(this.todaysSales))?0:parseFloat(this.todaysSales);
+    let start = isNaN(parseFloat(this.startAmount))?0:parseFloat(this.startAmount);
+    this.total = todays + start;
   }
 
   calculateTotalCashTill() {
+    let extra = isNaN(parseFloat(this.extraCash))?0:parseFloat(this.extraCash);
     this.totalCashTill = 10000*this.cashTill['10000'] +
     5000*this.cashTill['5000'] +
     2000*this.cashTill['2000'] +
@@ -55,15 +59,20 @@ export class HomePage {
     100*this.cashTill['100'] +
     50*this.cashTill['50'] +
     10*this.cashTill['10'] +
-    parseFloat(this.extraCash);
+    extra;
   }
 
   checkAllExpenses() {
-    this.totalExpenses = parseFloat(this.totalCashTill) + parseFloat(this.expenses) + parseFloat(this.creditCardPayments) + parseFloat(this.ownerAmount);
+    let expense = isNaN(parseFloat(this.expenses))?0:parseFloat(this.expenses);
+    let creditCardPayment = isNaN(parseFloat(this.creditCardPayments))?0:parseFloat(this.creditCardPayments);
+    let ownerAmount = isNaN(parseFloat(this.ownerAmount))?0:parseFloat(this.ownerAmount);
+    let coupon = isNaN(parseFloat(this.coupons))?0:parseFloat(this.coupons);
+    let mistakeAmt = isNaN(parseFloat(this.mistakeAmount))?0:parseFloat(this.mistakeAmount);
+    this.totalExpenses = parseFloat(this.totalCashTill) + expense + creditCardPayment + ownerAmount + coupon;
     if(this.mistake == "-")
-      this.totalExpenses = this.totalExpenses - parseFloat(this.mistakeAmount);
+      this.totalExpenses = this.totalExpenses - mistakeAmt;
     else
-      this.totalExpenses = this.totalExpenses + parseFloat(this.mistakeAmount);
+      this.totalExpenses = this.totalExpenses + mistakeAmt;
     console.log(this.totalExpenses);
   }
 
@@ -198,7 +207,7 @@ export class HomePage {
   }
 
   addDetails() {
-    this.expenseDetails.push({item:"",price:0});
+    this.expenseDetails.push({item:"",price:""});
   }
 
   removeItem(item){
@@ -213,19 +222,20 @@ export class HomePage {
   addItem() {
     let data = { 
       invoiceDate: this.invoiceDate,
-      startAmount: this.startAmount,
+      startAmount: isNaN(parseFloat(this.startAmount))?0:parseFloat(this.startAmount),
       xPrintTaken: this.printTaken,
-      todaysSales: this.todaysSales,
-      total: this.total,
-      extraCash: this.extraCash,
-      totalCashTill: this.totalCashTill,
-      expenses: this.expenses,
-      creditCardPayments: this.creditCardPayments,
+      todaysSales: isNaN(parseFloat(this.todaysSales))?0:parseFloat(this.todaysSales),
+      total: isNaN(parseFloat(this.total))?0:parseFloat(this.total),
+      extraCash: isNaN(parseFloat(this.extraCash))?0:parseFloat(this.extraCash),
+      totalCashTill: isNaN(parseFloat(this.totalCashTill))?0:parseFloat(this.totalCashTill),
+      expenses: isNaN(parseFloat(this.expenses))?0:parseFloat(this.expenses),
+      creditCardPayments: isNaN(parseFloat(this.creditCardPayments))?0:parseFloat(this.creditCardPayments),
+      coupons: isNaN(parseFloat(this.coupons))?0:parseFloat(this.coupons),
       mistake: this.mistake,
-      mistakeAmount: this.mistakeAmount,
+      mistakeAmount: isNaN(parseFloat(this.mistakeAmount))?0:parseFloat(this.mistakeAmount),
       cashOwner: this.cashOwner,
-      ownerAmount: this.ownerAmount,
-      totalExpenses: this.totalExpenses,
+      ownerAmount: isNaN(parseFloat(this.ownerAmount))?0:parseFloat(this.ownerAmount),
+      totalExpenses: isNaN(parseFloat(this.totalExpenses))?0:parseFloat(this.totalExpenses),
       status: this.totalExpenses-this.total,
       ZPrintTaken: this.ZPrintTaken,
       regClosed: this.regClosed,
@@ -247,6 +257,5 @@ export class HomePage {
 
   save(){
     this.addItem();
-    
   }
 }
