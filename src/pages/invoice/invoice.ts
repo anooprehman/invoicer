@@ -29,18 +29,19 @@ export class InvoicePage {
   }
 
   print(){
-    this.platform.ready().then(() => {
-    this.printer.isAvailable().then(function(){
-      console.log("available")
-      this.printer.print(this.invoiceContent.nativeElement.innerHTML).then(function(){
-        alert("printing done successfully !");
-      },function(){
-        alert("Error while printing !");
+    this.printer.isAvailable().then(()=>{
+      console.log("available",this.printer);
+      this.printer.pick().then((uri)=> {
+        console.log(uri)
+        this.printer.print(this.invoiceContent.nativeElement.innerHTML, { printerId: uri }).then(function(){
+          alert("printing done successfully !");
+        },function(){
+          alert("Error while printing !");
+        });
       });
       }, function(){
         console.log("not available")
         alert('Error : printing is unavailable on your device ');
       });
-    })
   }
 }
