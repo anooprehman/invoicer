@@ -7,16 +7,17 @@
 <ion-header>
   <ion-navbar>
       <ion-title text-center>SOUTH PARK @ ASAKUSA</ion-title>
-      <ion-buttons end>
-        <button ion-button icon-left outline color="light" (click)="print()">
-          <ion-icon name="print"></ion-icon>
-           Print
-        </button>
-      </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding #invoiceContent>
+    <ion-fab right bottom>
+        <button ion-fab color="secondary" mini><ion-icon name="md-share"></ion-icon></button>
+        <ion-fab-list side="top">
+          <button ion-fab color="primary" (click)="print()"><ion-icon name="print"></ion-icon></button>
+          <button ion-fab color="primary" (click)="share()"><ion-icon name="mail"></ion-icon></button>
+        </ion-fab-list>
+      </ion-fab>
     <ion-item-group>
       <ion-item-divider color="primary">INVOICE</ion-item-divider>
       <ion-item>

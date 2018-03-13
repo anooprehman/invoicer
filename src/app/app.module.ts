@@ -9,6 +9,7 @@ import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule, AngularFireDatabase } from 'angularfire2/database';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { Printer, PrintOptions } from '@ionic-native/printer';
+import { SocialSharing } from '@ionic-native/social-sharing';
 
 export const firebaseConfig = {
   apiKey: "AIzaSyD3C09IXt0pTt4QYo2l4Bhnwju5Km7KsJg",
@@ -39,6 +40,7 @@ export const firebaseConfig = {
     SplashScreen,
     AngularFireDatabase,
     Printer,
+    SocialSharing,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

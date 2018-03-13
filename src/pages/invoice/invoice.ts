@@ -1,6 +1,7 @@
 import { Component,ViewChild,ElementRef } from '@angular/core';
-import { Platform, IonicPage, NavController, NavParams } from 'ionic-angular';
-import { Printer, PrintOptions } from '@ionic-native/printer';
+import { Platform, IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
+import { Printer } from '@ionic-native/printer';
+import { SocialSharing } from '@ionic-native/social-sharing';
 
 /**
  * Generated class for the InvoicePage page.
@@ -20,7 +21,7 @@ export class InvoicePage {
   @ViewChild('invoiceContent', {read: ElementRef}) invoiceContent: ElementRef;
   item:any;
   invoiceId:any;
-  constructor(public platform: Platform, public navCtrl: NavController, public navParams: NavParams,private printer: Printer) {
+  constructor(public platform: Platform, public navCtrl: NavController, public navParams: NavParams,private printer: Printer, private socialSharing: SocialSharing, public toastCtrl: ToastController) {
     this.item = this.navParams.get('invoice');
   }
 
@@ -43,5 +44,29 @@ export class InvoicePage {
         console.log("not available")
         alert('Error : printing is unavailable on your device ');
       });
+  }
+
+  share() {
+    // Check if sharing via email is supported
+    this.socialSharing.canShareViaEmail().then(() => {
+      // Sharing via email is possible
+      this.socialSharing.shareViaEmail(this.invoiceContent.nativeElement.innerHTML, 'Invoice : '+new Date().toLocaleString(), ['anoop_ar@ymail.com']).then(() => {
+        // Success!
+        this.presentToast();
+      }).catch(() => {
+        // Error!
+      });
+    }).catch(() => {
+      // Sharing via email is not possible
+    });
+  }
+
+  presentToast() {
+    let toast = this.toastCtrl.create({
+      message: 'Mail sent successfully',
+      showCloseButton: true,
+      closeButtonText: 'Ok'
+    });
+    toast.present();
   }
 }
