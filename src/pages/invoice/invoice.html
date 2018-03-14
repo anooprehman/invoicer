@@ -10,7 +10,126 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding #invoiceContent>
+<ion-content padding >
+    <ion-fab right bottom>
+        <button ion-fab color="secondary" mini><ion-icon name="md-share"></ion-icon></button>
+        <ion-fab-list side="top">
+          <button ion-fab color="primary" (click)="print()"><ion-icon name="print"></ion-icon></button>
+          <button ion-fab color="primary" (click)="share()"><ion-icon name="mail"></ion-icon></button>
+        </ion-fab-list>
+      </ion-fab>
+      <div #invoiceContent>
+    <div class="invoice-box" >
+        <table cellpadding="0" cellspacing="0">
+            <tr class="top">
+                <td colspan="2">
+                    <table>
+                        <tr>
+                            <td class="title">
+                                <img src="assets/imgs/logo.png" style="width:50%; max-width:300px;">
+                            </td>
+                            
+                            <td>
+                                Invoice #: 123<br>
+                                Created: January 1, 2015<br>
+                                Due: February 1, 2015
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            
+            <tr class="information">
+                <td colspan="2">
+                    <table>
+                        <tr>
+                            <td>
+                                Sparksuite, Inc.<br>
+                                12345 Sunny Road<br>
+                                Sunnyville, CA 12345
+                            </td>
+                            
+                            <td>
+                                Acme Corp.<br>
+                                John Doe<br>
+                                john@example.com
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            
+            <tr class="heading">
+                <td>
+                    Payment Method
+                </td>
+                
+                <td>
+                    Check #
+                </td>
+            </tr>
+            
+            <tr class="details">
+                <td>
+                    Check
+                </td>
+                
+                <td>
+                    1000
+                </td>
+            </tr>
+            
+            <tr class="heading">
+                <td>
+                    Item
+                </td>
+                
+                <td>
+                    Price
+                </td>
+            </tr>
+            
+            <tr class="item">
+                <td>
+                    Website design
+                </td>
+                
+                <td>
+                    $300.00
+                </td>
+            </tr>
+            
+            <tr class="item">
+                <td>
+                    Hosting (3 months)
+                </td>
+                
+                <td>
+                    $75.00
+                </td>
+            </tr>
+            
+            <tr class="item last">
+                <td>
+                    Domain name (1 year)
+                </td>
+                
+                <td>
+                    $10.00
+                </td>
+            </tr>
+            
+            <tr class="total">
+                <td></td>
+                
+                <td>
+                   Total: $385.00
+                </td>
+            </tr>
+        </table>
+    </div>
+  </div>
+  <!--
     <ion-fab right bottom>
         <button ion-fab color="secondary" mini><ion-icon name="md-share"></ion-icon></button>
         <ion-fab-list side="top">
@@ -108,5 +227,6 @@
           <ion-label>{{item.comments}}</ion-label>
         </ion-item>
     </ion-item-group>
+  -->
 </ion-content>
 
