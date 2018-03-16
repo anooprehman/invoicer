@@ -10,10 +10,10 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding >
-    <ion-fab right bottom>
+<ion-content padding>
+    <ion-fab top right edge>
         <button ion-fab color="secondary" mini><ion-icon name="md-share"></ion-icon></button>
-        <ion-fab-list side="top">
+        <ion-fab-list>
           <button ion-fab color="primary" (click)="print()"><ion-icon name="print"></ion-icon></button>
           <button ion-fab color="primary" (click)="share()"><ion-icon name="mail"></ion-icon></button>
         </ion-fab-list>
@@ -26,33 +26,15 @@
                     <table>
                         <tr>
                             <td class="title">
-                                <img src="assets/imgs/logo.png" style="width:50%; max-width:300px;">
+                                <img src="assets/imgs/sp_logo_2.png" style="max-width:300px;">
                             </td>
                             
                             <td>
-                                Invoice #: 123<br>
-                                Created: January 1, 2015<br>
-                                Due: February 1, 2015
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-            
-            <tr class="information">
-                <td colspan="2">
-                    <table>
-                        <tr>
-                            <td>
-                                Sparksuite, Inc.<br>
-                                12345 Sunny Road<br>
-                                Sunnyville, CA 12345
-                            </td>
-                            
-                            <td>
-                                Acme Corp.<br>
-                                John Doe<br>
-                                john@example.com
+                                {{item.invoiceDate | date:'longDate'}}<br><br>
+                                South Park<br>
+                                Asakusa 6-11-4,Taito ku,<br>
+                                Tokyo, 111-0032<br>
+                                03-5603-4002
                             </td>
                         </tr>
                     </table>
@@ -61,70 +43,196 @@
             
             <tr class="heading">
                 <td>
-                    Payment Method
+                    INVOICE
                 </td>
                 
                 <td>
-                    Check #
+                    AMOUNT
                 </td>
             </tr>
             
-            <tr class="details">
+            <tr class="item">
                 <td>
-                    Check
+                    Starting Amount
                 </td>
                 
                 <td>
-                    1000
+                    {{item.startAmount | currency:'JPY'}}
+                </td>
+            </tr>
+            <tr class="item">
+                <td>
+                    X Print taken?
+                </td>
+                
+                <td>
+                    {{item.xPrintTaken ? "Yes":"No"}}
+                </td>
+            </tr>
+            <tr class="item">
+                <td>
+                    Total Sales
+                </td>
+                
+                <td>
+                    {{item.todaysSales | currency:'JPY'}}
+                </td>
+            </tr>
+            <tr class="total">
+                <td>
+                    Total
+                </td>
+                
+                <td>
+                    {{item.total | currency:'JPY'}}
                 </td>
             </tr>
             
             <tr class="heading">
                 <td>
-                    Item
+                    CASH IN TILL
                 </td>
                 
                 <td>
-                    Price
+                    AMOUNT
                 </td>
             </tr>
             
             <tr class="item">
                 <td>
-                    Website design
+                    Cash in Till
                 </td>
                 
                 <td>
-                    $300.00
+                    {{(item.totalCashTill - item.extraCash) | currency:'JPY'}}
                 </td>
             </tr>
-            
             <tr class="item">
                 <td>
-                    Hosting (3 months)
+                    Extra Coin/Cash available
                 </td>
                 
                 <td>
-                    $75.00
+                    {{item.extraCash | currency:'JPY'}}
                 </td>
             </tr>
-            
+            <tr class="total item">
+                <td>
+                    Total Cash in TILL
+                </td>
+                
+                <td>
+                    {{item.totalCashTill | currency:'JPY'}}
+                </td>
+            </tr>
+            <tr class="item">
+                <td>
+                    Expenses
+                </td>
+                
+                <td>
+                    {{item.expenses | currency:'JPY'}}
+                </td>
+            </tr>
+            <tr class="item">
+                <td>
+                    Credit Card Payments
+                </td>
+                
+                <td>
+                    {{item.creditCardPayments | currency:'JPY'}}
+                </td>
+            </tr>
+            <tr class="item">
+                <td>
+                    Coupons
+                </td>
+                
+                <td>
+                    {{item.coupons | currency:'JPY'}}
+                </td>
+            </tr>
+            <tr class="item">
+                <td>
+                    Mistake Expenses
+                </td>
+                
+                <td>
+                    {{item.mistake}} {{item.mistakeAmount | currency:'JPY'}}
+                </td>
+            </tr>
+            <tr class="item">
+                <td>
+                    Cash handover to owner
+                </td>
+                
+                <td>
+                    {{item.cashOwner}} : {{item.ownerAmount | currency:'JPY'}}
+                </td>
+            </tr>
+            <tr class="total item">
+                <td>
+                    Total Expenses
+                </td>
+                
+                <td>
+                    {{item.totalExpenses | currency:'JPY'}}
+                </td>
+            </tr>
+            <tr class="item">
+                <td>
+                    Amount difference
+                </td>
+                
+                <td>
+                    {{item.status | currency:'JPY'}}
+                </td>
+            </tr>
+            <tr class="item">
+                <td>
+                    Z Print taken?
+                </td>
+                
+                <td>
+                    {{item.ZPrintTaken ? "Yes":"No"}}
+                </td>
+            </tr>
+            <tr class="item">
+                <td>
+                    Register Closed?
+                </td>
+                
+                <td>
+                    {{item.regClosed ? "Yes":"No"}}
+                </td>
+            </tr>
+            <tr class="heading">
+                <td>
+                    ALL EXPENSES
+                </td>
+                <td>
+                    AMOUNT
+                </td>
+            </tr>
+            <tr class="item" *ngFor="let expense of item.expenseDetails;">
+                <td>
+                    {{expense.item}}
+                </td>
+                <td>
+                    {{expense.price | currency:'JPY'}}
+                </td>
+            </tr>
+            <tr class="heading">
+                <td>
+                    COMMENTS
+                </td>
+                <td></td>
+            </tr>
             <tr class="item last">
                 <td>
-                    Domain name (1 year)
+                    {{item.comments == ""?"No comments" : item.comments}}
                 </td>
-                
-                <td>
-                    $10.00
-                </td>
-            </tr>
-            
-            <tr class="total">
                 <td></td>
-                
-                <td>
-                   Total: $385.00
-                </td>
             </tr>
         </table>
     </div>
