@@ -15,7 +15,8 @@ export class MyApp {
   constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {
     this.pages = [
       { title: 'Home', component: 'home', index: 0, icon: 'home' },
-      { title: 'Invoice List', component: 'invoice-list', index: 1, icon: 'list' }
+      { title: 'Invoice List', component: 'invoice-list', index: 1, icon: 'list' },
+      { title: 'Expense List', component: 'expense-list', index: 2, icon: 'cash' },
     ];
     console.log(this.pages);
     platform.ready().then(() => {
