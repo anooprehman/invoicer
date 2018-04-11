@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController, ModalController } from 'ionic-angular';
 import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
 import { Observable } from 'rxjs/Observable';
 
@@ -23,7 +23,7 @@ export class ExpenseListPage {
   expenseList:Array<any>;
   loadedexpenseList:Array<any>;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, afDB: AngularFireDatabase, public alertCtrl: AlertController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, afDB: AngularFireDatabase, public alertCtrl: AlertController, public modalCtrl: ModalController) {
     this.expenses = afDB.list('expenseTypes').valueChanges();
     this.expensesRef = afDB.list('expenseTypes');
 
@@ -84,7 +84,21 @@ export class ExpenseListPage {
   }
 
   updateExpense(key, type, name){
-    let prompt = this.alertCtrl.create({
+    let expenseTypes = this.unique(this.loadedexpenseList,'type');
+    console.log(expenseTypes);
+    let modal = this.modalCtrl.create("expense-modal",{type:type,name:name, types:expenseTypes},{enableBackdropDismiss:false});
+    modal.onDidDismiss(data => {
+      if(data) {
+        console.log(data);
+        this.expensesRef.update(key, {
+          type: data.type,
+          name: data.name
+        });
+      }
+    });
+    modal.present();
+
+    /*let prompt = this.alertCtrl.create({
       title: 'Expense Type',
       inputs: [
         {
@@ -116,7 +130,13 @@ export class ExpenseListPage {
         }
       ]
     });
-    prompt.present();
+    prompt.present();*/
+  }
+
+  unique(arr, prop){
+    return arr.map(function(e) { return e[prop]; }).filter(function(e,i,a){
+      return i === a.indexOf(e);
+    });
   }
 
   getExpenses(ev: any) {

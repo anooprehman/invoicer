@@ -1,0 +1,32 @@
+<!--
+  Generated template for the ItemExpensePage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Item Expense</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="dismiss()">
+        <ion-icon name="close" ></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-item text-right no-padding>
+    <ion-select [(ngModel)]="selecttype" style="max-width:100%;width:100%">
+      <ion-option *ngFor="let item of types" [value]="item">{{item.type}}-{{item.name}}</ion-option>
+    </ion-select>
+  </ion-item>
+  <ion-item text-right no-padding>
+    <ion-input placeholder="Price" [(ngModel)]="price" text-right></ion-input>
+  </ion-item>
+
+  <button ion-button block (click)="save()">Save</button>
+</ion-content>

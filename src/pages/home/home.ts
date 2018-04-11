@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, AlertController, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, AlertController, ToastController, ModalController } from 'ionic-angular';
 import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
 import { Observable } from 'rxjs/Observable';
 import { Printer, PrintOptions } from '@ionic-native/printer';
@@ -15,6 +15,8 @@ export class HomePage {
 
   items: Observable<any[]>;
   itemsRef: AngularFireList<any>;
+  expenseFromDb: Observable<any[]>;
+  expensesRef: AngularFireList<any>;
   printTaken:boolean = false;
   ZPrintTaken:boolean = false;
   regClosed:boolean = false;
@@ -35,13 +37,21 @@ export class HomePage {
   mistake:string = "+";
   comments:string = "";
   cashTill:{ 10000: number, 5000: number, 2000: number,1000: number, 500: number, 100: number,50: number, 10: number };
-  expenseDetails:Array<{item:string,price:any}> = [{item:"",price:""}];
+  expenseDetails:Array<{item:string,price:any}> = [];
+  expenseList:Array<any>;
 
-  constructor(public navCtrl: NavController, afDB: AngularFireDatabase, private alertCtrl: AlertController,private printer: Printer, public toastCtrl: ToastController) {
+  constructor(public navCtrl: NavController, afDB: AngularFireDatabase, private alertCtrl: AlertController,private printer: Printer, public toastCtrl: ToastController, public modalCtrl: ModalController) {
     this.items = afDB.list('invoices').valueChanges();
     this.itemsRef = afDB.list('invoices');
     let tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
     this.invoiceDate = (new Date(Date.now() - tzoffset)).toISOString().slice(0,-1);
+
+    this.expenseFromDb = afDB.list('expenseTypes').valueChanges();
+    this.expensesRef = afDB.list('expenseTypes');
+
+    this.expenseFromDb.subscribe(items => {
+      this.expenseList = items;
+    });
   }
 
   checkTotal() {
@@ -52,15 +62,21 @@ export class HomePage {
 
   calculateTotalCashTill() {
     let extra = isNaN(parseFloat(this.extraCash))?0:parseFloat(this.extraCash);
-    this.totalCashTill = 10000*this.cashTill['10000'] +
-    5000*this.cashTill['5000'] +
-    2000*this.cashTill['2000'] +
-    1000*this.cashTill['1000'] +
-    500*this.cashTill['500'] +
-    100*this.cashTill['100'] +
-    50*this.cashTill['50'] +
-    10*this.cashTill['10'] +
-    extra;
+    if(this.cashTill) {
+      this.totalCashTill = 10000*this.cashTill['10000'] +
+      5000*this.cashTill['5000'] +
+      2000*this.cashTill['2000'] +
+      1000*this.cashTill['1000'] +
+      500*this.cashTill['500'] +
+      100*this.cashTill['100'] +
+      50*this.cashTill['50'] +
+      10*this.cashTill['10'] +
+      extra;
+    }
+    else {
+      this.totalCashTill = extra;
+    }
+    this.checkAllExpenses();
   }
 
   checkAllExpenses() {
@@ -152,7 +168,6 @@ export class HomePage {
             10:isNaN(parseInt(data['10']))?0:parseInt(data['10'])
           }
           this.calculateTotalCashTill();
-          this.checkAllExpenses();
         }
       }
     ]
@@ -209,7 +224,14 @@ export class HomePage {
   }
 
   addDetails() {
-    this.expenseDetails.push({item:"",price:""});
+    let modal = this.modalCtrl.create("item-expense",{types:this.expenseList},{enableBackdropDismiss:false});
+    modal.onDidDismiss(data => {
+      if(data){
+        console.log(data);
+        this.expenseDetails.push({item:data.type.type+"-"+data.type.name,price:parseFloat(data.price)});
+      }
+    });
+    modal.present();
   }
 
   removeItem(item){

@@ -1,0 +1,47 @@
+<!--
+  Generated template for the ExpenseModalPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>ExpenseModal</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="dismiss()">
+        <ion-icon name="close" ></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+    <ion-row>
+        <ion-col>
+          <ion-item >
+              <ion-label style="color:#999">Expense Type</ion-label>
+          </ion-item>
+        </ion-col>
+        <ion-col>
+          <ion-item text-right no-padding>
+            <ion-select [(ngModel)]="selecttype" interface="popover" style="max-width:100%;width:100%" (ionChange)="setType()">
+              <ion-option *ngFor="let item of types" [value]="item" checked="item == type">{{item}}</ion-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+        <ion-col>
+          <ion-item text-right no-padding>
+            <ion-input placeholder="Type" [(ngModel)]="type" text-right></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-item text-right>
+        <ion-label style="color:#999">Expense Name</ion-label>
+        <ion-input placeholder="Name" [(ngModel)]="name" text-right></ion-input>
+    </ion-item>
+
+    <button ion-button block (click)="save()">Save</button>
+</ion-content>
