@@ -22,22 +22,16 @@
     <div class="invoice-box" >
         <table cellpadding="0" cellspacing="0">
             <tr class="top">
-                <td colspan="2">
-                    <table>
-                        <tr>
-                            <td class="title">
-                                <img src="assets/imgs/sp_logo_2.png" style="max-width:300px;">
-                            </td>
-                            
-                            <td>
-                                {{item.invoiceDate | date:'longDate'}}<br><br>
-                                South Park<br>
-                                Asakusa 6-11-4,Taito ku,<br>
-                                Tokyo, 111-0032<br>
-                                03-5603-4002
-                            </td>
-                        </tr>
-                    </table>
+                <td class="title">
+                    <img src="assets/imgs/sp_logo_2.png" style="max-width:300px;">
+                </td>
+                
+                <td>
+                    {{item.invoiceDate | date:'longDate'}}<br><br>
+                    South Park<br>
+                    Asakusa 6-11-4,Taito ku,<br>
+                    Tokyo, 111-0032<br>
+                    03-5603-4002
                 </td>
             </tr>
             
@@ -233,6 +227,27 @@
                     {{item.comments == ""?"No comments" : item.comments}}
                 </td>
                 <td></td>
+            </tr>            
+            <tr class="total">
+                <td></td>
+                
+                <td>
+                    Total Sales : {{item.todaysSales | currency:'JPY'}}
+                </td>
+            </tr>
+            <tr class="total">
+                <td></td>
+                
+                <td>
+                    Expenses : {{item.expenses | currency:'JPY'}}
+                </td>
+            </tr>
+            <tr class="total">
+                <td></td>
+                
+                <td>
+                    Credit Card Payments : {{item.creditCardPayments | currency:'JPY'}}
+                </td>
             </tr>
         </table>
     </div>

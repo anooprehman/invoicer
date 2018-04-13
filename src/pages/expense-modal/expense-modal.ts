@@ -25,7 +25,6 @@ export class ExpenseModalPage {
     this.types = navParams.get("types");
     this.type = navParams.get("type");
     this.name = navParams.get("name");
-    console.log(this.type,this.types,this.name)
   }
 
   ionViewDidLoad() {
@@ -37,7 +36,6 @@ export class ExpenseModalPage {
   }
 
   setType(){
-    console.log(this.selecttype);
     this.type = this.selecttype;
   }
 

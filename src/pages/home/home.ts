@@ -90,7 +90,6 @@ export class HomePage {
       this.totalExpenses = this.totalExpenses - mistakeAmt;
     else
       this.totalExpenses = this.totalExpenses + mistakeAmt;
-    console.log(this.totalExpenses);
   }
 
   addCashTill() {
@@ -235,7 +234,6 @@ export class HomePage {
   }
 
   removeItem(item){
-    console.log(this.expenseDetails,item);
     let index = this.expenseDetails.indexOf(item);
 
     if(index > -1){
@@ -294,6 +292,18 @@ export class HomePage {
   }
 
   save(){
-    this.addItem();
+    let sum = this.expenseDetails.reduce((s, a) => s + a.price, 0);
+    let difference = this.expenses - sum;
+    if(difference) {
+      let alert = this.alertCtrl.create({
+        title: 'Error!',
+        subTitle: 'Mismatch in the amount for expense and expense details.(¥'+difference+')',
+        buttons: ['OK']
+      });
+      alert.present();
+    }
+    else {
+      this.addItem();
+    }
   }
 }
